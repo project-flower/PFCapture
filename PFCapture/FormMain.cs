@@ -19,6 +19,7 @@ namespace PFCapture
         private ClipboardViewer clipboardViewer = null;
         private bool dialogShowing = false;
         private Dictionary<string, Encoding> encodings = new Dictionary<string, Encoding>();
+        private FormPreview formPreview;
         private Dictionary<string, FormatAndExtensions> imageFormats = new Dictionary<string, FormatAndExtensions>();
         private bool launched = false;
 
@@ -50,6 +51,7 @@ namespace PFCapture
             encodings.Add(Encoding.ASCII.EncodingName, Encoding.ASCII);
             encodings.Add(Encoding.BigEndianUnicode.EncodingName, Encoding.BigEndianUnicode);
             encodings.Add(Encoding.UTF32.EncodingName, Encoding.UTF32);
+            formPreview = new FormPreview();
         }
 
         #endregion
@@ -177,17 +179,28 @@ namespace PFCapture
 
             try
             {
-                using (Image image = Clipboard.GetImage())
-                {
-                    if (image == null)
-                    {
-                        return false;
-                    }
+                Image image = Clipboard.GetImage();
 
-                    crateDirectory(directoryName);
-                    image.Save(fileFullName, formatAndExtensions.Key);
-                    return true;
+                if (image == null)
+                {
+                    return false;
                 }
+
+                crateDirectory(directoryName);
+                image.Save(fileFullName, formatAndExtensions.Key);
+
+                int previewTime = (int)numericUpDownPreviewTime.Value;
+
+                if (previewTime > 0)
+                {
+                    formPreview.Show(this, image, previewTime);
+                }
+                else
+                {
+                    image.Dispose();
+                }
+
+                return true;
             }
             catch (Exception exception)
             {
