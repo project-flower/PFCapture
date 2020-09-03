@@ -35,6 +35,7 @@ namespace PFCapture
             FormBorderStyle = FormBorderStyle.Sizable;
             MinimumSize = Size;
             MaximumSize = new System.Drawing.Size(int.MaxValue, Size.Height);
+            notifyIcon.Icon = Resources.Small;
             imageFormats.Add("PNG", new FormatAndExtensions(ImageFormat.Png, ".png"));
             imageFormats.Add("BMP", new FormatAndExtensions(ImageFormat.Bmp, ".bmp"));
             imageFormats.Add("EMF", new FormatAndExtensions(ImageFormat.Emf, ".emf"));
@@ -61,6 +62,11 @@ namespace PFCapture
         private void clipboardViewer_DrawClipBoard(object sender, ClipboardEventArgs e)
         {
             if (!launched)
+            {
+                return;
+            }
+
+            if (!checkBoxEnable.Checked)
             {
                 return;
             }
@@ -285,6 +291,25 @@ namespace PFCapture
 
         // Designer Methods
 
+        private void checkBoxEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEnable.Checked)
+            {
+                notifyIcon.Icon = Resources.Small;
+            }
+            else
+            {
+                notifyIcon.Icon = Resources.Gray;
+            }
+        }
+
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            bool enable = checkBoxEnable.Checked;
+            toolStripMenuItemEnable.Checked = enable;
+            toolStripMenuItemDisable.Checked = !enable;
+        }
+
         private void load(object sender, EventArgs e)
         {
             comboBoxFilePath.Items.Add(Application.StartupPath);
@@ -333,6 +358,26 @@ namespace PFCapture
 
             comboBoxImage.SelectedIndex = 0;
             launched = true;
+        }
+
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    checkBoxEnable.Checked = !checkBoxEnable.Checked;
+                    break;
+            }
+        }
+
+        private void toolStripMenuItemDisable_Click(object sender, EventArgs e)
+        {
+            checkBoxEnable.Checked = false;
+        }
+
+        private void toolStripMenuItemEnable_Click(object sender, EventArgs e)
+        {
+            checkBoxEnable.Checked = true;
         }
     }
 }

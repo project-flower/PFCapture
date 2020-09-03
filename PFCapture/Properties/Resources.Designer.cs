@@ -61,6 +61,16 @@ namespace PFCapture.Properties {
         }
         
         /// <summary>
+        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Icon Gray {
+            get {
+                object obj = ResourceManager.GetObject("Gray", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   My Pictures に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ShellFolderMyPictures {
@@ -75,6 +85,16 @@ namespace PFCapture.Properties {
         internal static string ShellFolderPersonal {
             get {
                 return ResourceManager.GetString("ShellFolderPersonal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Icon Small {
+            get {
+                object obj = ResourceManager.GetObject("Small", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

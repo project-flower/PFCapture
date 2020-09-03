@@ -92,6 +92,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PFCapture.ico" />
+    <None Include="Resources\Gray.ico" />
+    <None Include="Resources\Small.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
