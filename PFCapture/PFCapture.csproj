@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClipboardViewer.cs" />
+    <Compile Include="ClipboardViewer\ClipboardViewer.cs" />
+    <Compile Include="ClipboardViewer\Window.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -16,12 +16,10 @@ namespace PFCapture
     {
         #region Private Fields
 
-        private ClipboardViewer clipboardViewer = null;
         private bool dialogShowing = false;
         private Dictionary<string, Encoding> encodings = new Dictionary<string, Encoding>();
         private FormPreview formPreview;
         private Dictionary<string, FormatAndExtensions> imageFormats = new Dictionary<string, FormatAndExtensions>();
-        private bool launched = false;
 
         #endregion
 
@@ -30,8 +28,6 @@ namespace PFCapture
         public FormMain()
         {
             InitializeComponent();
-            clipboardViewer = new ClipboardViewer(this);
-            clipboardViewer.DrawClipboard += clipboardViewer_DrawClipBoard;
             FormBorderStyle = FormBorderStyle.Sizable;
             MinimumSize = Size;
             MaximumSize = new System.Drawing.Size(int.MaxValue, Size.Height);
@@ -58,101 +54,6 @@ namespace PFCapture
         #endregion
 
         #region Private Methods
-
-        private void clipboardViewer_DrawClipBoard(object sender, ClipboardEventArgs e)
-        {
-            if (!launched)
-            {
-                return;
-            }
-
-            if (!checkBoxEnable.Checked)
-            {
-                return;
-            }
-
-            if (dialogShowing)
-            {
-                return;
-            }
-
-            string encodingName = comboBoxText.Text;
-            string formatName = comboBoxImage.Text;
-            bool imageFormatExists = imageFormats.ContainsKey(formatName);
-            bool encodingFormatExists = encodings.ContainsKey(encodingName);
-
-            if (!(imageFormatExists || encodingFormatExists))
-            {
-                return;
-            }
-
-            string fileName;
-
-            try
-            {
-                DateTime currentTime = DateTime.Now;
-                fileName = string.Format("{0:d4}{1:d2}{2:d2}{3:d2}{4:d2}{5:d2}",
-                    currentTime.Year, currentTime.Month, currentTime.Day, currentTime.Hour, currentTime.Minute, currentTime.Second);
-            }
-            catch (Exception exception)
-            {
-                showErrorMessage(exception.Message);
-                return;
-            }
-
-            string directoryName = comboBoxFilePath.Text;
-            string savedFileName = string.Empty;
-            bool saved = false;
-
-            if (encodingFormatExists)
-            {
-                Encoding encoding;
-
-                if (encodings.TryGetValue(comboBoxText.Text, out encoding))
-                {
-                    if (saveClipboardText(directoryName, fileName, encoding, out savedFileName))
-                    {
-                        saved = true;
-                        notifyFileSaveCompleted(savedFileName);
-                    }
-                }
-                else
-                {
-                    notifyFatalError();
-                }
-            }
-
-            if (imageFormatExists)
-            {
-                FormatAndExtensions formatAndExtensions;
-
-                if (imageFormats.TryGetValue(comboBoxImage.Text, out formatAndExtensions))
-                {
-                    savedFileName = string.Empty;
-
-                    if (saveClipboardImage(directoryName, fileName, formatAndExtensions, out savedFileName))
-                    {
-                        saved = true;
-                        notifyFileSaveCompleted(savedFileName);
-                    }
-                }
-                else
-                {
-                    notifyFatalError();
-                }
-            }
-
-            if (saved)
-            {
-                IEnumerable<object> items = comboBoxFilePath.Items.OfType<object>();
-                bool exist = items.Any(n => string.Compare(n.ToString(), directoryName, true) == 0);
-
-                if (!exist)
-                {
-                    comboBoxFilePath.Items.Add(directoryName);
-                }
-            }
-        }
 
         void crateDirectory(string directoryName)
         {
@@ -293,13 +194,106 @@ namespace PFCapture
 
         private void checkBoxEnable_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxEnable.Checked)
+            bool enabled = checkBoxEnable.Checked;
+            clipboardViewer.Enabled = enabled;
+
+            if (enabled)
             {
                 notifyIcon.Icon = Resources.Small;
             }
             else
             {
                 notifyIcon.Icon = Resources.Gray;
+            }
+        }
+
+        private void clipboardViewer_DrawClipBoard(object sender, ClipboardEventArgs e)
+        {
+            if (!checkBoxEnable.Checked)
+            {
+                return;
+            }
+
+            if (dialogShowing)
+            {
+                return;
+            }
+
+            string encodingName = comboBoxText.Text;
+            string formatName = comboBoxImage.Text;
+            bool imageFormatExists = imageFormats.ContainsKey(formatName);
+            bool encodingFormatExists = encodings.ContainsKey(encodingName);
+
+            if (!(imageFormatExists || encodingFormatExists))
+            {
+                return;
+            }
+
+            string fileName;
+
+            try
+            {
+                DateTime currentTime = DateTime.Now;
+                fileName = string.Format("{0:d4}{1:d2}{2:d2}{3:d2}{4:d2}{5:d2}",
+                    currentTime.Year, currentTime.Month, currentTime.Day, currentTime.Hour, currentTime.Minute, currentTime.Second);
+            }
+            catch (Exception exception)
+            {
+                showErrorMessage(exception.Message);
+                return;
+            }
+
+            string directoryName = comboBoxFilePath.Text;
+            string savedFileName = string.Empty;
+            bool saved = false;
+
+            if (encodingFormatExists)
+            {
+                Encoding encoding;
+
+                if (encodings.TryGetValue(comboBoxText.Text, out encoding))
+                {
+                    if (saveClipboardText(directoryName, fileName, encoding, out savedFileName))
+                    {
+                        saved = true;
+                        notifyFileSaveCompleted(savedFileName);
+                    }
+                }
+                else
+                {
+                    notifyFatalError();
+                }
+            }
+
+            if (imageFormatExists)
+            {
+                FormatAndExtensions formatAndExtensions;
+
+                if (imageFormats.TryGetValue(comboBoxImage.Text, out formatAndExtensions))
+                {
+                    savedFileName = string.Empty;
+
+                    if (saveClipboardImage(directoryName, fileName, formatAndExtensions, out savedFileName))
+                    {
+                        saved = true;
+                        notifyFileSaveCompleted(savedFileName);
+                    }
+                }
+                else
+                {
+                    notifyFatalError();
+                }
+            }
+
+            if (saved)
+            {
+                IEnumerable<object> items = comboBoxFilePath.Items.OfType<object>();
+                bool exist = items.Any(n => string.Compare(n.ToString(), directoryName, true) == 0);
+
+                if (!exist)
+                {
+                    comboBoxFilePath.Items.Add(directoryName);
+                }
             }
         }
 
@@ -357,7 +351,6 @@ namespace PFCapture
             }
 
             comboBoxImage.SelectedIndex = 0;
-            launched = true;
         }
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)

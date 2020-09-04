@@ -38,11 +38,12 @@
             this.numericUpDownPreviewTime = new System.Windows.Forms.NumericUpDown();
             this.labelText = new System.Windows.Forms.Label();
             this.comboBoxText = new System.Windows.Forms.ComboBox();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEnable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDisable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemCancel = new System.Windows.Forms.ToolStripMenuItem();
+            this.clipboardViewer = new PFCapture.ClipboardViewer();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreviewTime)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -152,17 +153,6 @@
             this.comboBoxText.Size = new System.Drawing.Size(121, 20);
             this.comboBoxText.TabIndex = 8;
             // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemEnable,
-            this.toolStripMenuItemDisable,
-            this.toolStripSeparator1,
-            this.toolStripMenuItemCancel});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(113, 76);
-            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
-            // 
             // toolStripMenuItemEnable
             // 
             this.toolStripMenuItemEnable.Name = "toolStripMenuItemEnable";
@@ -187,6 +177,23 @@
             this.toolStripMenuItemCancel.Name = "toolStripMenuItemCancel";
             this.toolStripMenuItemCancel.Size = new System.Drawing.Size(112, 22);
             this.toolStripMenuItemCancel.Text = "&Cancel";
+            // 
+            // clipboardViewer
+            // 
+            this.clipboardViewer.Enabled = true;
+            this.clipboardViewer.Owner = this;
+            this.clipboardViewer.DrawClipBoard += new PFCapture.ClipboardEventHandler(this.clipboardViewer_DrawClipBoard);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEnable,
+            this.toolStripMenuItemDisable,
+            this.toolStripSeparator1,
+            this.toolStripMenuItemCancel});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(113, 76);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // notifyIcon
             // 
@@ -230,11 +237,12 @@
         private System.Windows.Forms.NumericUpDown numericUpDownPreviewTime;
         private System.Windows.Forms.Label labelText;
         private System.Windows.Forms.ComboBox comboBoxText;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEnable;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDisable;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCancel;
+        private ClipboardViewer clipboardViewer;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
