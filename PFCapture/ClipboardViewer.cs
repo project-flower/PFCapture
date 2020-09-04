@@ -15,6 +15,7 @@ namespace PFCapture
     {
         #region Private Fields
 
+        private bool messageReceived;
         private IntPtr nextHandle;
 
         #endregion
@@ -29,6 +30,7 @@ namespace PFCapture
 
         public ClipboardViewer(Form form)
         {
+            messageReceived = false;
             form.HandleCreated += new EventHandler(formHandleCreated);
             form.HandleDestroyed += new EventHandler(formHandleDestroyed);
         }
@@ -41,23 +43,17 @@ namespace PFCapture
         {
             switch ((WM)(m.Msg))
             {
-
                 case WM.DRAWCLIPBOARD:
+                    if (!messageReceived)
+                    {
+                        // SetClipboardViewer 直後のメッセージは、クリップボードの更新ではないので無視
+                        messageReceived = true;
+                        break;
+                    }
+
                     DrawClipboard(this, new ClipboardEventArgs());
 
                     if (nextHandle != IntPtr.Zero)
-                    {
-                        User32.PostMessage(nextHandle, m.Msg, m.WParam, m.LParam);
-                    }
-
-                    break;
-
-                case WM.CHANGECBCHAIN:
-                    if (m.WParam == nextHandle)
-                    {
-                        nextHandle = m.LParam;
-                    }
-                    else if (nextHandle != IntPtr.Zero)
                     {
                         User32.PostMessage(nextHandle, m.Msg, m.WParam, m.LParam);
                     }
@@ -75,6 +71,7 @@ namespace PFCapture
         private void formHandleCreated(object sender, EventArgs e)
         {
             AssignHandle((sender as Form).Handle);
+            messageReceived = false;
             nextHandle = User32.SetClipboardViewer(Handle);
         }
 
