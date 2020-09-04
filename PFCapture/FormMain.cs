@@ -31,7 +31,7 @@ namespace PFCapture
         {
             InitializeComponent();
             clipboardViewer = new ClipboardViewer(this);
-            clipboardViewer.DrawClipBoard += clipboardViewer_DrawClipBoard;
+            clipboardViewer.DrawClipboard += clipboardViewer_DrawClipBoard;
             FormBorderStyle = FormBorderStyle.Sizable;
             MinimumSize = Size;
             MaximumSize = new System.Drawing.Size(int.MaxValue, Size.Height);

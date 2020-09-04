@@ -21,7 +21,7 @@ namespace PFCapture
 
         #region Public Properties
 
-        public event ClipboardEventHandler DrawClipBoard = delegate { };
+        public event ClipboardEventHandler DrawClipboard = delegate { };
 
         #endregion
 
@@ -43,7 +43,7 @@ namespace PFCapture
             {
 
                 case WM.DRAWCLIPBOARD:
-                    DrawClipBoard(this, new ClipboardEventArgs());
+                    DrawClipboard(this, new ClipboardEventArgs());
 
                     if (nextHandle != IntPtr.Zero)
                     {
