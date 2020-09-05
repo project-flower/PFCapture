@@ -55,7 +55,7 @@ namespace PFCapture
 
         #region Private Methods
 
-        void crateDirectory(string directoryName)
+        private void crateDirectory(string directoryName)
         {
             try
             {
@@ -70,17 +70,17 @@ namespace PFCapture
             }
         }
 
-        void notifyFatalError()
+        private void notifyFatalError()
         {
             showErrorMessage("致命的なエラーが発生しました。");
         }
 
-        void notifyFileSaveCompleted(string fileName)
+        private void notifyFileSaveCompleted(string fileName)
         {
             showBalloonTip(string.Format("ファイルを保存しました。\r\n{0}", fileName));
         }
 
-        bool saveClipboardImage(string directoryName, string fileName, FormatAndExtensions formatAndExtensions, out string fileFullName)
+        private bool saveClipboardImage(string directoryName, string fileName, FormatAndExtensions formatAndExtensions, out string fileFullName)
         {
             fileFullName = string.Format("{0}{1}{2}{3}", directoryName, Path.DirectorySeparatorChar, fileName, formatAndExtensions.Value);
 
@@ -117,7 +117,7 @@ namespace PFCapture
             return false;
         }
 
-        bool saveClipboardText(string directoryName, string fileName, Encoding encoding, out string fileFullName)
+        private bool saveClipboardText(string directoryName, string fileName, Encoding encoding, out string fileFullName)
         {
             fileFullName = string.Format("{0}{1}{2}.txt", directoryName, Path.DirectorySeparatorChar, fileName);
 
@@ -142,7 +142,7 @@ namespace PFCapture
             return false;
         }
 
-        void showBalloonTip(string message)
+        private void showBalloonTip(string message)
         {
             notifyIcon.ShowBalloonTip(2000, Text, message, ToolTipIcon.Info);
 
@@ -158,12 +158,12 @@ namespace PFCapture
             }
         }
 
-        void showErrorMessage(string message)
+        private void showErrorMessage(string message)
         {
             showMessage(message, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        void showMessage(string message, MessageBoxButtons messageBoxButtons, MessageBoxIcon messageBoxIcon)
+        private void showMessage(string message, MessageBoxButtons messageBoxButtons, MessageBoxIcon messageBoxIcon)
         {
             if (dialogShowing)
             {
